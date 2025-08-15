@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HPTA Security Suite - CyberSec Analysis Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-bg: #0a0e16;
+            --secondary-bg: #111827;
+            --accent-bg: #1f2937;
+            --primary-cyan: #00ffff;
+            --secondary-cyan: #22d3ee;
+            --success-green: #10b981;
+            --warning-orange: #f59e0b;
+            --danger-red: #ef4444;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: rgba(34, 211, 238, 0.2);
+            --glow-cyan: rgba(0, 255, 255, 0.3);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background grid */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(34, 211, 238, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(34, 211, 238, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            animation: gridMove 20s linear infinite;
+            z-index: -1;
+        }
+
+        /* Floating orbs animation */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(34, 211, 238, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            animation: orbFloat 15s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(20px, 20px); }
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: rotate(0deg) translateX(0px); }
+            33% { transform: rotate(120deg) translateX(10px); }
+            66% { transform: rotate(240deg) translateX(-10px); }
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 24px;
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px var(--primary-cyan)); }
+            50% { filter: drop-shadow(0 0 20px var(--primary-cyan)) drop-shadow(0 0 30px rgba(0, 255, 255, 0.3)); }
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-cyan), var(--text-primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .beta-badge {
+            background: var(--secondary-cyan);
+            color: var(--primary-bg);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 20px;
+            font-size: 12px;
+            color: var(--success-green);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--success-green);
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 10px var(--success-green);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.1); }
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-cyan), var(--secondary-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+            color: var(--primary-bg);
+        }
+
+        /* Main Container */
+        .container {
+            margin-top: 60px;
+            display: grid;
+            grid-template-columns: 350px 1fr 300px;
+            height: calc(100vh - 60px);
+            gap: 1px;
+            background: var(--border-color);
+        }
+
+        /* Left Sidebar */
+        .left-sidebar {
+            background: var(--secondary-bg);
+            padding: 24px;
+            overflow-y: auto;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .scan-summary h2 {
+            color: var(--primary-cyan);
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .summary-stats {
+            margin-bottom: 24px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .stat-value {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .vulnerabilities-found {
+            color: var(--danger-red);
+        }
+
+        .severity-breakdown {
+            margin-bottom: 24px;
+        }
+
+        .severity-breakdown h3 {
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .severity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+        }
+
+        .severity-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .severity-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .severity-dot.critical { background: var(--danger-red); }
+        .severity-dot.high { background: var(--warning-orange); }
+        .severity-dot.medium { background: var(--secondary-cyan); }
+        .severity-dot.low { background: var(--success-green); }
+
+        .severity-count {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .scan-status {
+            margin-bottom: 24px;
+        }
+
+        .scan-status h3 {
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .status-item:hover {
+            background: rgba(34, 211, 238, 0.1);
+        }
+
+        .status-label {
+            color: var(--text-secondary);
+        }
+
+        .status-value {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .status-value.active {
+            color: var(--success-green);
+        }
+
+        .status-value.inactive {
+            color: var(--text-muted);
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: var(--accent-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--secondary-cyan);
+            color: var(--primary-bg);
+            border-color: var(--secondary-cyan);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(34, 211, 238, 0.3);
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, var(--primary-cyan), var(--secondary-cyan));
+            color: var(--primary-bg);
+            border-color: var(--primary-cyan);
+            font-weight: 600;
+        }
+
+        .action-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 255, 255, 0.4);
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--primary-bg);
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 32px;
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.05), rgba(34, 211, 238, 0.05));
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .welcome-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--primary-cyan), var(--text-primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .welcome-subtitle {
+            color: var(--text-secondary);
+            font-size: 18px;
+            font-weight: 400;
+        }
+
+        .feature-highlight {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .feature-card {
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .feature-card:hover {
+            background: rgba(34, 211, 238, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .feature-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .api-section, .command-section {
+            background: var(--secondary-bg);
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 24px;
+        }
+
+        .api-section h3, .command-section h3 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-cyan);
+            margin-bottom: 16px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .api-input-group {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .api-input {
+            flex: 1;
+            padding: 12px 16px;
+            background: var(--accent-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .api-input:focus {
+            outline: none;
+            border-color: var(--primary-cyan);
+            box-shadow: 0 0 0 2px rgba(0, 255, 255, 0.1);
+        }
+
+        .validate-btn {
+            padding: 12px 24px;
+            background: var(--primary-cyan);
+            color: var(--primary-bg);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .validate-btn:hover {
+            background: var(--secondary-cyan);
+            transform: translateY(-1px);
+        }
+
+        .api-status {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .api-status.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .api-status.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-red);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .command-section {
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .command-section.enabled {
+            opacity: 1;
+        }
+
+        .command-input {
+            width: 100%;
+            padding: 18px;
+            background: var(--accent-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: 'JetBrains Mono', monospace;
+            resize: vertical;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            min-height: 120px;
+        }
+
+        .command-input:focus {
+            outline: none;
+            border-color: var(--primary-cyan);
+            box-shadow: 0 0 0 3px rgba(0, 255, 255, 0.1);
+            background: rgba(31, 41, 55, 0.8);
+        }
+
+        .command-input::placeholder {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .command-examples {
+            background: rgba(16, 185, 129, 0.05);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+
+        .command-examples strong {
+            color: var(--success-green);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .analyze-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary-cyan), var(--secondary-cyan));
+            color: var(--primary-bg);
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 255, 255, 0.3);
+        }
+
+        /* File Upload Section */
+        .file-upload-section {
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+            margin-bottom: 24px;
+        }
+
+        .file-upload-section.enabled {
+            opacity: 1;
+        }
+
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 32px;
+            text-align: center;
+            background: rgba(31, 41, 55, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--primary-cyan);
+            background: rgba(31, 41, 55, 0.5);
+        }
+
+        .file-upload-area.dragover {
+            border-color: var(--success-green);
+            background: rgba(16, 185, 129, 0.1);
+            transform: scale(1.02);
+        }
+
+        .file-upload-icon {
+            font-size: 48px;
+            color: var(--primary-cyan);
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .file-upload-text {
+            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .file-upload-hint {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--warning-orange), #f97316);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .file-list {
+            margin-top: 16px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: var(--accent-bg);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .file-icon {
+            color: var(--warning-orange);
+            font-size: 16px;
+        }
+
+        .file-name {
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .file-size {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-left: auto;
+            margin-right: 8px;
+        }
+
+        .remove-file {
+            background: var(--danger-red);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .remove-file:hover {
+            background: #dc2626;
+            transform: scale(1.1);
+        }
+
+        .upload-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--accent-bg);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .upload-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-cyan), var(--success-green));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Right Sidebar */
+        .right-sidebar {
+            background: var(--secondary-bg);
+            padding: 24px;
+            overflow-y: auto;
+            border-left: 1px solid var(--border-color);
+        }
+
+        .live-analysis h2 {
+            color: var(--primary-cyan);
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .terminal-output {
+            background: var(--primary-bg);
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            min-height: 120px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            overflow-y: auto;
+        }
+
+        .terminal-line {
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .terminal-line:before {
+            content: '$ ';
+            color: var(--primary-cyan);
+        }
+
+        .progress-container {
+            margin-bottom: 20px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--accent-bg);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-cyan), var(--secondary-cyan));
+            transition: width 0.3s ease;
+        }
+
+        .findings-preview {
+            margin-bottom: 20px;
+        }
+
+        .findings-preview h3 {
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        #liveFindings {
+            background: var(--primary-bg);
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            min-height: 80px;
+            font-size: 12px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 280px 1fr 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+            }
+            
+            .left-sidebar, .right-sidebar {
+                max-height: 300px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--primary-bg);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Header -->
+    <div class="header">
+        <div class="logo">
+            <div class="logo-icon">🛡️</div>
+            <div class="logo-text">HPTA<span class="beta-badge">Beta</span></div>
+        </div>
+        <div class="status-indicator">
+            <div class="status-dot"></div>
+            <span>Active Scan</span>
+            <span>|</span>
+            <span>Last Response: 00:23s ago</span>
+        </div>
+        <div class="user-profile">
+            <div class="user-avatar">CA</div>
+            <span>CyberSec_Analyst</span>
+            <span>▼</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Left Sidebar - Scan Summary -->
+        <div class="left-sidebar">
+            <div class="scan-summary">
+                <h2>Scan Summary</h2>
+                
+                <div class="summary-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Vulnerabilities Found:</span>
+                        <span class="stat-value vulnerabilities-found" id="vulnCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Scan Time:</span>
+                        <span class="stat-value" id="scanTime">0 mins 0 secs</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Target:</span>
+                        <span class="stat-value" id="scanTarget">-</span>
+                    </div>
+                </div>
+
+                <div class="severity-breakdown">
+                    <h3>Severity Breakdown</h3>
+                    <div class="severity-item">
+                        <div class="severity-label">
+                            <div class="severity-dot critical"></div>
+                            Critical
+                        </div>
+                        <div class="severity-count" id="criticalCount">0</div>
+                    </div>
+                    <div class="severity-item">
+                        <div class="severity-label">
+                            <div class="severity-dot high"></div>
+                            High
+                        </div>
+                        <div class="severity-count" id="highCount">0</div>
+                    </div>
+                    <div class="severity-item">
+                        <div class="severity-label">
+                            <div class="severity-dot medium"></div>
+                            Medium
+                        </div>
+                        <div class="severity-count" id="mediumCount">0</div>
+                    </div>
+                    <div class="severity-item">
+                        <div class="severity-label">
+                            <div class="severity-dot low"></div>
+                            Low
+                        </div>
+                        <div class="severity-count" id="lowCount">0</div>
+                    </div>
+                </div>
+
+                <div class="scan-status">
+                    <h3>System Status</h3>
+                    <div class="status-item">
+                        <span class="status-label">🛡️ Security Engine:</span>
+                        <span class="status-value active" id="engineStatus">Active</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">🤖 AI Model:</span>
+                        <span class="status-value" id="aiModelStatus">Gemini 1.5</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">📊 Last Scan:</span>
+                        <span class="status-value" id="lastScanTime">Never</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">🎯 Threat Level:</span>
+                        <span class="status-value" id="threatLevel">Low</span>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn primary" onclick="generateReport()">
+                        <span>📊</span>
+                        Generate Report
+                    </button>
+                    <button class="action-btn" onclick="exportData()">
+                        <span>💾</span>
+                        Export Data
+                    </button>
+                    <button class="action-btn" onclick="clearScan()">
+                        <span>🔄</span>
+                        Reset Scan
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div class="analysis-area">
+                <!-- Welcome Section -->
+                <div class="welcome-section">
+                    <h1 class="welcome-title">CyberSec Analysis Platform</h1>
+                    <p class="welcome-subtitle">AI-powered vulnerability scanning and threat analysis</p>
+                    
+                    <div class="feature-highlight">
+                        <div class="feature-card">
+                            <div class="feature-icon">🌐</div>
+                            <div class="feature-name">Web Security</div>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🦠</div>
+                            <div class="feature-name">Malware Analysis</div>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🔧</div>
+                            <div class="feature-name">Reverse Engineering</div>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🤖</div>
+                            <div class="feature-name">AI-Powered</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API Key Validation Section -->
+                <div class="api-section">
+                    <h3>
+                        <span>🔑</span>
+                        Gemini API Configuration
+                    </h3>
+                    <div class="api-input-group">
+                        <input type="password" id="apiKey" class="api-input" placeholder="Enter your Gemini API key...">
+                        <button onclick="validateApiKey()" class="validate-btn" id="validateBtn">
+                            Validate Key
+                        </button>
+                    </div>
+                    <div id="apiStatus" class="api-status"></div>
+                </div>
+
+                <!-- Command Input Section -->
+                <div class="command-section" id="commandSection">
+                    <h3>
+                        <span>🧠</span>
+                        AI Security Analysis
+                    </h3>
+                    
+                    <div class="command-examples">
+                        <strong>💡 Quick Start Examples:</strong>
+                        • Scan http://example.com for OWASP vulnerabilities<br>
+                        • Analyze uploaded malware sample for behavioral patterns<br>  
+                        • Perform comprehensive security assessment of target system<br>
+                        • Check network configuration for security vulnerabilities
+                    </div>
+                    
+                    <textarea id="commandInput" class="command-input" placeholder="🔍 Enter your security analysis command...
+
+Examples:
+• Scan https://target-website.com for web vulnerabilities
+• Analyze malware.exe for threats and IOCs
+• Reverse engineer binary.dll for vulnerability research
+• Perform penetration testing on 192.168.1.0/24
+• Check SSL/TLS configuration for security issues"></textarea>
+                    
+                    <!-- File Upload Section -->
+                    <div class="file-upload-section" id="fileUploadSection">
+                        <h3>
+                            <span>📁</span>
+                            File Upload for Analysis
+                        </h3>
+                        
+                        <div class="file-upload-area" id="fileUploadArea" onclick="document.getElementById('fileInput').click()">
+                            <div class="file-upload-icon">📎</div>
+                            <div class="file-upload-text">Upload files for malware analysis or reverse engineering</div>
+                            <div class="file-upload-hint">
+                                Supported: .exe, .dll, .bin, .apk, .zip and more • Max size: 100MB
+                            </div>
+                            <button type="button" class="upload-btn">
+                                <span>📂</span>
+                                Choose Files
+                            </button>
+                            <input type="file" id="fileInput" class="file-input" multiple accept=".exe,.dll,.bin,.apk,.zip,.pdf,.doc,.docx,.txt,.py,.js,.java,.cpp,.c,.h">
+                        </div>
+                        
+                        <div id="fileList" class="file-list" style="display: none;"></div>
+                        <div id="uploadProgress" class="upload-progress" style="display: none;">
+                            <div id="uploadProgressBar" class="upload-progress-bar"></div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="startAnalysis()" class="analyze-btn" id="analyzeBtn">
+                        <span>🚀</span>
+                        Initialize Security Scan
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar - Live Analysis -->
+        <div class="right-sidebar">
+            <div class="live-analysis">
+                <h2>Live Analysis</h2>
+                
+                <div class="terminal-output" id="terminalOutput">
+                    <div class="terminal-line">System initialized...</div>
+                    <div class="terminal-line">Waiting for analysis command...</div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span id="progressLabel">Ready</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="findings-preview">
+                    <h3>Live Findings</h3>
+                    <div id="liveFindings">
+                        <div style="text-align: center; color: var(--text-muted); font-size: 12px; padding: 20px;">
+                            No active scan running
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="exportFindings()">💾 Export</button>
+                    <button class="action-btn" onclick="clearAnalysis()">🗑️ Clear</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let apiKeyValidated = false;
+        let currentAnalysisId = null;
+        let analysisStartTime = null;
+        let progressInterval = null;
+        let analysisCounter = 0;
+        let uploadedFiles = [];
+
+        // File Upload Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('fileInput');
+            const fileUploadArea = document.getElementById('fileUploadArea');
+            const fileList = document.getElementById('fileList');
+            
+            // File input change handler
+            fileInput.addEventListener('change', handleFileSelect);
+            
+            // Drag and drop functionality
+            fileUploadArea.addEventListener('dragover', handleDragOver);
+            fileUploadArea.addEventListener('dragleave', handleDragLeave);
+            fileUploadArea.addEventListener('drop', handleFileDrop);
+            
+            // Update section states based on API key validation
+            updateSectionStates();
+        });
+
+        function handleFileSelect(event) {
+            const files = Array.from(event.target.files);
+            addFilesToList(files);
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.currentTarget.classList.add('dragover');
+        }
+
+        function handleDragLeave(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.currentTarget.classList.remove('dragover');
+        }
+
+        function handleFileDrop(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.currentTarget.classList.remove('dragover');
+            
+            const files = Array.from(event.dataTransfer.files);
+            addFilesToList(files);
+        }
+
+        function addFilesToList(files) {
+            const fileList = document.getElementById('fileList');
+            
+            files.forEach(file => {
+                // Check file size (100MB limit)
+                if (file.size > 100 * 1024 * 1024) {
+                    showTerminalMessage(`❌ File "${file.name}" is too large. Maximum size is 100MB.`, 'error');
+                    return;
+                }
+                
+                // Check if file already exists
+                const existingFile = uploadedFiles.find(f => f.name === file.name && f.size === file.size);
+                if (existingFile) {
+                    showTerminalMessage(`⚠️ File "${file.name}" is already selected.`, 'warning');
+                    return;
+                }
+                
+                uploadedFiles.push(file);
+                renderFileList();
+                showTerminalMessage(`📎 Added file: ${file.name} (${formatFileSize(file.size)})`, 'success');
+            });
+        }
+
+        function removeFile(index) {
+            const removedFile = uploadedFiles[index];
+            uploadedFiles.splice(index, 1);
+            renderFileList();
+            showTerminalMessage(`🗑️ Removed file: ${removedFile.name}`, 'info');
+        }
+
+        function renderFileList() {
+            const fileList = document.getElementById('fileList');
+            
+            if (uploadedFiles.length === 0) {
+                fileList.style.display = 'none';
+                return;
+            }
+            
+            fileList.style.display = 'block';
+            fileList.innerHTML = uploadedFiles.map((file, index) => `
+                <div class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">${getFileIcon(file.name)}</span>
+                        <span class="file-name" title="${file.name}">${file.name}</span>
+                    </div>
+                    <span class="file-size">${formatFileSize(file.size)}</span>
+                    <button class="remove-file" onclick="removeFile(${index})" title="Remove file">
+                        ✕
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function getFileIcon(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const iconMap = {
+                'exe': '⚙️',
+                'dll': '🔧',
+                'bin': '📦',
+                'apk': '📱',
+                'zip': '🗜️',
+                'rar': '🗜️',
+                '7z': '🗜️',
+                'pdf': '📄',
+                'doc': '📝',
+                'docx': '📝',
+                'txt': '📄',
+                'py': '🐍',
+                'js': '📜',
+                'java': '☕',
+                'cpp': '⚡',
+                'c': '⚡',
+                'h': '📋'
+            };
+            return iconMap[ext] || '📄';
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        async function uploadFiles() {
+            if (uploadedFiles.length === 0) {
+                return [];
+            }
+            
+            const uploadProgress = document.getElementById('uploadProgress');
+            const uploadProgressBar = document.getElementById('uploadProgressBar');
+            
+            uploadProgress.style.display = 'block';
+            uploadProgressBar.style.width = '0%';
+            
+            const uploadedFilePaths = [];
+            
+            for (let i = 0; i < uploadedFiles.length; i++) {
+                const file = uploadedFiles[i];
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                try {
+                    showTerminalMessage(`📤 Uploading ${file.name}...`, 'info');
+                    
+                    const response = await fetch('/api/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (response.ok && result.success) {
+                        uploadedFilePaths.push(result.file_path);
+                        showTerminalMessage(`✅ Uploaded: ${file.name}`, 'success');
+                    } else {
+                        showTerminalMessage(`❌ Upload failed: ${file.name} - ${result.error || 'Unknown error'}`, 'error');
+                    }
+                    
+                    // Update progress
+                    const progress = ((i + 1) / uploadedFiles.length) * 100;
+                    uploadProgressBar.style.width = progress + '%';
+                    
+                } catch (error) {
+                    showTerminalMessage(`❌ Upload error: ${file.name} - ${error.message}`, 'error');
+                }
+            }
+            
+            setTimeout(() => {
+                uploadProgress.style.display = 'none';
+                uploadProgressBar.style.width = '0%';
+            }, 1000);
+            
+            return uploadedFilePaths;
+        }
+
+        function updateSectionStates() {
+            const commandSection = document.getElementById('commandSection');
+            const fileUploadSection = document.getElementById('fileUploadSection');
+            
+            if (apiKeyValidated) {
+                commandSection.classList.add('enabled');
+                fileUploadSection.classList.add('enabled');
+            } else {
+                commandSection.classList.remove('enabled');
+                fileUploadSection.classList.remove('enabled');
+            }
+        }
+
+        // API Key Validation
+        async function validateApiKey() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const validateBtn = document.getElementById('validateBtn');
+            const apiStatus = document.getElementById('apiStatus');
+            
+            if (!apiKey) {
+                showApiStatus('Please enter an API key', 'error');
+                return;
+            }
+
+            validateBtn.disabled = true;
+            validateBtn.innerHTML = 'Validating...<div class="loading"></div>';
+
+            try {
+                const response = await fetch('/api/validate-key', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ api_key: apiKey })
+                });
+
+                const result = await response.json();
+
+                if (result.valid) {
+                    showApiStatus('✅ API Key validated successfully!', 'success');
+                    apiKeyValidated = true;
+                    updateSectionStates();
+                    
+                    // Store API key for session
+                    sessionStorage.setItem('gemini_api_key', apiKey);
+                } else {
+                    showApiStatus('❌ Invalid API key. Please check and try again.', 'error');
+                    apiKeyValidated = false;
+                    updateSectionStates();
+                }
+            } catch (error) {
+                showApiStatus('❌ Error validating API key. Please try again.', 'error');
+                apiKeyValidated = false;
+            }
+
+            validateBtn.disabled = false;
+            validateBtn.innerHTML = 'Validate Key';
+        }
+
+        function extractTarget(command) {
+            // Extract target from command (URL, IP, filename, etc.)
+            const urlMatch = command.match(/https?:\/\/[^\s]+/);
+            if (urlMatch) return urlMatch[0];
+            
+            const ipMatch = command.match(/\b(?:\d{1,3}\.){3}\d{1,3}\b/);
+            if (ipMatch) return ipMatch[0];
+            
+            const fileMatch = command.match(/\b\w+\.\w+\b/);
+            if (fileMatch) return fileMatch[0];
+            
+            return 'Unknown Target';
+        }
+
+        function updateLastScanTime() {
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString();
+            document.getElementById('lastScanTime').textContent = timeStr;
+        }
+
+        function showApiStatus(message, type) {
+            const apiStatus = document.getElementById('apiStatus');
+            apiStatus.textContent = message;
+            apiStatus.className = `api-status ${type}`;
+            apiStatus.style.display = 'block';
+        }
+
+        // Start Analysis
+        async function startAnalysis() {
+            if (!apiKeyValidated) {
+                alert('Please validate your API key first');
+                return;
+            }
+
+            const command = document.getElementById('commandInput').value.trim();
+            if (!command) {
+                alert('Please enter a security analysis command');
+                return;
+            }
+
+            analysisCounter++;
+            
+            // Update status indicators
+            document.getElementById('engineStatus').textContent = 'Scanning';
+            document.getElementById('engineStatus').className = 'status-value active';
+            document.getElementById('scanTarget').textContent = extractTarget(command);
+            
+            // Reset progress
+            updateProgress(0, 'Initializing AI analysis...');
+            addTerminalLine('🚀 Starting security analysis...');
+            addTerminalLine(`📝 Command: ${command}`);
+            
+            // Handle file uploads if any files are selected
+            let uploadedFilePaths = [];
+            if (uploadedFiles.length > 0) {
+                addTerminalLine('� Uploading files for analysis...');
+                updateProgress(5, 'Uploading files...');
+                uploadedFilePaths = await uploadFiles();
+                
+                if (uploadedFilePaths.length > 0) {
+                    addTerminalLine(`✅ Uploaded ${uploadedFilePaths.length} file(s) successfully`);
+                    // Update command to include file references
+                    const fileList = uploadedFilePaths.map(path => path.split('/').pop()).join(', ');
+                    addTerminalLine(`📁 Files: ${fileList}`);
+                } else {
+                    addTerminalLine('❌ File upload failed - continuing with command analysis only');
+                }
+            }
+            
+            addTerminalLine('🔍 Initializing security modules...');
+            
+            analysisStartTime = Date.now();
+            startDurationCounter();
+
+            try {
+                const requestBody = { 
+                    command: command,
+                    api_key: sessionStorage.getItem('gemini_api_key')
+                };
+                
+                // Include uploaded file paths if any
+                if (uploadedFilePaths.length > 0) {
+                    requestBody.uploaded_files = uploadedFilePaths;
+                }
+
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const result = await response.json();
+                currentAnalysisId = result.analysis_id;
+
+                addTerminalLine(`Analysis ID: ${currentAnalysisId}`);
+                // Start monitoring progress
+                monitorProgress();
+
+            } catch (error) {
+                updateProgress(0, 'Error starting analysis');
+                addTerminalLine('Error: Failed to start analysis');
+                console.error('Analysis error:', error);
+            }
+        }
+
+        // Monitor Analysis Progress
+        function monitorProgress() {
+            progressInterval = setInterval(async () => {
+                try {
+                    const response = await fetch(`/progress/${currentAnalysisId}`);
+                    const progress = await response.json();
+
+                    updateProgress(progress.percentage, progress.status);
+                    addTerminalLine(`Progress: ${progress.percentage}% - ${progress.status}`);
+
+                    // Add new findings
+                    if (progress.findings && progress.findings.length > 0) {
+                        addLiveFindings(progress.findings);
+                    }
+
+                    // Update statistics
+                    if (progress.stats) {
+                        updateStatistics(progress.stats);
+                    }
+
+                    // Check if analysis is complete
+                    if (progress.percentage >= 100 || progress.status === 'completed') {
+                        clearInterval(progressInterval);
+                        addTerminalLine('✅ Analysis completed successfully!');
+                        
+                        // Update status
+                        document.getElementById('engineStatus').textContent = 'Complete';
+                        document.getElementById('engineStatus').className = 'status-value';
+                        updateLastScanTime();
+                        
+                        // Update threat level based on findings
+                        const criticalCount = parseInt(document.getElementById('criticalCount').textContent);
+                        const highCount = parseInt(document.getElementById('highCount').textContent);
+                        
+                        let threatLevel = 'Low';
+                        if (criticalCount > 0) threatLevel = 'Critical';
+                        else if (highCount > 0) threatLevel = 'High';
+                        else if (parseInt(document.getElementById('mediumCount').textContent) > 0) threatLevel = 'Medium';
+                        
+                        document.getElementById('threatLevel').textContent = threatLevel;
+                        
+                        // Show report
+                        if (progress.report) {
+                            addTerminalLine('📊 Report generated and ready for download');
+                        }
+                    }
+
+                } catch (error) {
+                    console.error('Progress monitoring error:', error);
+                    addTerminalLine('Warning: Progress monitoring interrupted');
+                }
+            }, 2000); // Poll every 2 seconds
+        }
+
+        function updateProgress(percentage, status) {
+            document.getElementById('progressFill').style.width = percentage + '%';
+            document.getElementById('progressPercent').textContent = percentage + '%';
+            document.getElementById('progressLabel').textContent = status;
+        }
+
+        function addTerminalLine(text) {
+            const terminalOutput = document.getElementById('terminalOutput');
+            const line = document.createElement('div');
+            line.className = 'terminal-line';
+            line.textContent = text;
+            terminalOutput.appendChild(line);
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }
+
+        function showTerminalMessage(text, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const message = `[${timestamp}] ${text}`;
+            addTerminalLine(message);
+        }
+
+        function addLiveFindings(findings) {
+            const liveFindings = document.getElementById('liveFindings');
+            
+            findings.forEach(finding => {
+                const findingElement = document.createElement('div');
+                findingElement.className = `finding-item ${finding.severity.toLowerCase()}`;
+                findingElement.innerHTML = `
+                    <strong>${finding.title}</strong><br>
+                    <small>${finding.description}</small>
+                `;
+                liveFindings.appendChild(findingElement);
+            });
+        }
+
+        function updateStatistics(stats) {
+            if (stats.vulnerabilities) document.getElementById('vulnCount').textContent = stats.vulnerabilities;
+            if (stats.critical) document.getElementById('criticalCount').textContent = stats.critical;
+            if (stats.high) document.getElementById('highCount').textContent = stats.high;
+            if (stats.medium) document.getElementById('mediumCount').textContent = stats.medium;
+            if (stats.low) document.getElementById('lowCount').textContent = stats.low;
+        }
+
+        function startDurationCounter() {
+            setInterval(() => {
+                if (analysisStartTime) {
+                    const duration = Math.floor((Date.now() - analysisStartTime) / 1000);
+                    const minutes = Math.floor(duration / 60);
+                    const seconds = duration % 60;
+                    document.getElementById('scanTime').textContent = `${minutes} mins ${seconds} secs`;
+                }
+            }, 1000);
+        }
+
+        function generateReport() {
+            if (!currentAnalysisId) {
+                alert('No analysis data available. Please run a scan first.');
+                return;
+            }
+            
+            addTerminalLine('Generating comprehensive report...');
+            
+            // Simulate report generation
+            setTimeout(() => {
+                const link = document.createElement('a');
+                link.href = `/download-report/${currentAnalysisId}`;
+                link.download = `hpta_security_report_${currentAnalysisId}.html`;
+                link.click();
+                addTerminalLine('Report download initiated');
+            }, 1000);
+        }
+
+        function exportFindings() {
+            addTerminalLine('Exporting findings...');
+            // Create and download findings export
+            const findings = {
+                timestamp: new Date().toISOString(),
+                session_id: currentAnalysisId,
+                vulnerabilities: document.getElementById('vulnCount').textContent,
+                critical: document.getElementById('criticalCount').textContent,
+                high: document.getElementById('highCount').textContent,
+                medium: document.getElementById('mediumCount').textContent,
+                low: document.getElementById('lowCount').textContent
+            };
+            
+            const dataStr = JSON.stringify(findings, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `hpta_findings_${Date.now()}.json`;
+            link.click();
+            
+            addTerminalLine('Findings exported successfully');
+        }
+
+        function exportData() {
+            exportFindings();
+        }
+
+        function clearScan() {
+            clearAnalysis();
+            // Reset additional fields
+            document.getElementById('vulnCount').textContent = '0';
+            document.getElementById('criticalCount').textContent = '0';
+            document.getElementById('highCount').textContent = '0';
+            document.getElementById('mediumCount').textContent = '0';
+            document.getElementById('lowCount').textContent = '0';
+            document.getElementById('scanTime').textContent = '0 mins 0 secs';
+            document.getElementById('scanTarget').textContent = '-';
+            document.getElementById('lastScanTime').textContent = 'Never';
+            
+            addTerminalLine('Scan data cleared');
+        }
+
+        function clearAnalysis() {
+            document.getElementById('terminalOutput').innerHTML = `
+                <div class="terminal-line">System initialized...</div>
+                <div class="terminal-line">Waiting for analysis command...</div>
+            `;
+            document.getElementById('liveFindings').innerHTML = `
+                <div style="text-align: center; color: var(--text-muted); font-size: 12px; padding: 20px;">
+                    No active scan running
+                </div>
+            `;
+            updateProgress(0, 'Ready');
+            currentAnalysisId = null;
+            analysisStartTime = null;
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if API key is already stored
+            const storedApiKey = sessionStorage.getItem('gemini_api_key');
+            if (storedApiKey) {
+                document.getElementById('apiKey').value = storedApiKey;
+                validateApiKey();
+            }
+        });
+
+        // Handle Enter key in command input
+        document.getElementById('commandInput').addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                startAnalysis();
+            }
+        });
+
+        // Handle Enter key in API key input
+        document.getElementById('apiKey').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                validateApiKey();
+            }
+        });
+    </script>
+</body>
+</html>

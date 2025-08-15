@@ -1,0 +1,72 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# HPTA Specific
+reports/*.html
+reports/*.json
+temp_reports/
+uploads/*
+!uploads/.gitkeep
+*.db
+*.log
+
+# Docker
+docker-data/
+
+# Security
+*.key
+*.pem
+*.crt
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.old
+
+# Test files
+test_*.txt
+test_*.exe
+test_*.bin
+suspicious_*.txt
+comprehensive_*.bin
+
+# Generated reports
+*_report_*.json
+*_analysis_*.json
+*_unified_report_*.json

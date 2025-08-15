@@ -1,0 +1,74 @@
+# Docker ignore file for HPTA Security Suite
+
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Reports (will be mounted as volume)
+reports/
+uploads/
+temp_reports/
+
+# Docker
+docker-compose.yml
+
+# Documentation
+docs/
+
+# Test files
+test_*.py
+*_test.py
+tests/
+
+# Development files
+debug_*.py
+dev_*.py

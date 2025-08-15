@@ -1,0 +1,88 @@
+MZ�      ��  �       @                                   �   � �	�!�L�!This program cannot be run in DOS mode.
+
+$       PE  L    �        � "  
+         .text   �                     `.data   �                      @.rdata  �                       @.reloc  �                      @B
+
+HPTA TEST DLL - SUSPICIOUS LIBRARY SIMULATION
+
+This DLL exhibits characteristics typical of malicious libraries:
+
+EXPORT TABLE (Simulated):
+- DllMain
+- StartMaliciousActivity
+- InjectIntoProcess
+- EstablishPersistence
+- CommunicateWithC2
+- EncryptUserFiles
+- StealCredentials
+- DisableSecuritySoftware
+
+IMPORT TABLE (Suspicious APIs):
+KERNEL32.DLL:
+  - CreateRemoteThread
+  - VirtualAllocEx
+  - WriteProcessMemory
+  - CreateFileW
+  - CreateMutexW
+  - GetModuleHandleW
+  - GetProcAddress
+  - LoadLibraryW
+
+NTDLL.DLL:
+  - NtCreateThreadEx
+  - NtWriteVirtualMemory
+  - NtQuerySystemInformation
+  - NtSetInformationProcess
+
+ADVAPI32.DLL:
+  - RegCreateKeyExW
+  - RegSetValueExW
+  - OpenProcessToken
+  - LookupPrivilegeValueW
+  - AdjustTokenPrivileges
+
+WININET.DLL:
+  - InternetOpenW
+  - InternetConnectW
+  - HttpOpenRequestW
+  - HttpSendRequestW
+  - InternetReadFile
+
+USER32.DLL:
+  - FindWindowW
+  - SetWindowsHookExW
+  - GetAsyncKeyState
+  - RegisterHotKey
+
+STRINGS FOUND:
+- "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run"
+- "C:\\Windows\\System32\\drivers\\etc\\hosts"
+- "127.0.0.1 security-update.microsoft.com"
+- "cmd.exe /c del /q /f %TEMP%\\*"
+- "powershell.exe -ExecutionPolicy Bypass"
+- "net user admin password123 /add"
+- "netsh firewall set opmode mode=DISABLE"
+- "reg add HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender"
+
+BEHAVIORAL INDICATORS:
+- High entropy sections detected (possible packing/encryption)
+- Multiple suspicious API imports
+- Registry modification capabilities
+- Network communication functionality
+- Process injection capabilities
+- Anti-analysis techniques
+- Persistence mechanisms
+
+NETWORK INDICATORS:
+- test-malware-c2.hpta-security.local
+- backdoor-command.test.local:443
+- data-exfil.evil-server.test:8080
+
+FILE HASH:
+MD5: 7d865e959b2466918c9863afca942d0f
+SHA1: 356a192b7913b04c54574d18c28d46e6395428ab
+SHA256: 50d858e0985ecc7f60418aaf0cc5ab587f42c2570a884095a9e8ccacd0f6545c
+
+This is a HARMLESS test file created for HPTA Security Suite testing.
+It simulates malicious DLL characteristics but performs no actual harm.
+Designed to trigger security analysis alerts for testing purposes only.
