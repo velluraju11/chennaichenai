@@ -1,0 +1,14 @@
+{
+  "results": {
+    "ultra": {
+      "scanner": "ultra",
+      "target": "C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\banking_trojan_test.py",
+      "timestamp": "2025-08-16T15:24:13.138467",
+      "success": false,
+      "output": "Initializing Ultra Malware Scanner V3.0 Nexus Edition...\nLoading quantum AI detection engines...\nStarting quantum analysis...\n",
+      "errors": "Traceback (most recent call last):\n  File \"C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\scripts\\..\\ultra_malware_scanner_v3.py\", line 346, in <module>\n    main()\n  File \"C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\scripts\\..\\ultra_malware_scanner_v3.py\", line 320, in main\n    analysis = scanner.deep_static_analysis(file_path)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\scripts\\..\\ultra_malware_scanner_v3.py\", line 170, in deep_static_analysis\n    \"entropy\": self.calculate_file_entropy(raw_data),\n               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\scripts\\..\\ultra_malware_scanner_v3.py\", line 88, in calculate_file_entropy\n    entropy -= p * (p.bit_length() - 1) if p > 0 else 0\n                    ^^^^^^^^^^^^\nAttributeError: 'float' object has no attribute 'bit_length'\n",
+      "return_code": 1
+    }
+  },
+  "success": false
+}

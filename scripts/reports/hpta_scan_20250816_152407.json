@@ -1,0 +1,14 @@
+{
+  "results": {
+    "ultra": {
+      "scanner": "ultra",
+      "target": "../banking_trojan_test.py",
+      "timestamp": "2025-08-16T15:24:07.911049",
+      "success": false,
+      "output": "Error: File '../banking_trojan_test.py' not found\n",
+      "errors": "",
+      "return_code": 1
+    }
+  },
+  "success": false
+}

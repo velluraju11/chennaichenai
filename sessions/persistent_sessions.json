@@ -1,0 +1,12 @@
+{
+  "98321a1d-35a4-46e1-a49b-1661eec15341": {
+    "command": "http://testhtml5.vulnweb.com/ scan forvulnerablity",
+    "api_key": "AIzaSyBqSZnnhH2bRgI005UuFmJgHkqtIfHURSo",
+    "uploaded_files": [],
+    "status": "initializing",
+    "progress": 0,
+    "findings": [],
+    "report": null,
+    "start_time": "2025-08-16T17:51:55.690619"
+  }
+}

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HPTA Backend Test</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff41;
+            margin: 20px;
+        }
+        .terminal {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+        input {
+            flex: 1;
+            background: #2a2a2a;
+            color: #00ff41;
+            border: 1px solid #333;
+            padding: 10px;
+            font-family: inherit;
+        }
+        button {
+            background: #00ff41;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .status {
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .connected { color: #00ff41; }
+        .disconnected { color: #ff4444; }
+    </style>
+</head>
+<body>
+    <h1>🛡️ HPTA Backend Connection Test</h1>
+    <div class="status" id="status">Disconnected</div>
+    
+    <div class="terminal" id="terminal">
+        <div>Connecting to HPTA backend server...</div>
+    </div>
+    
+    <div class="input-area">
+        <input type="text" id="commandInput" placeholder="Enter command (help, status, scan example.com)">
+        <button onclick="sendCommand()">Send</button>
+        <button onclick="clearTerminal()">Clear</button>
+    </div>
+
+    <script>
+        let websocket = null;
+        const terminal = document.getElementById('terminal');
+        const status = document.getElementById('status');
+        const commandInput = document.getElementById('commandInput');
+
+        function addToTerminal(message) {
+            const div = document.createElement('div');
+            div.innerHTML = message;
+            terminal.appendChild(div);
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function connectToBackend() {
+            try {
+                websocket = new WebSocket('ws://localhost:8765');
+                
+                websocket.onopen = function() {
+                    status.textContent = 'Connected to HPTA Backend';
+                    status.className = 'status connected';
+                    addToTerminal('<span style="color: #00ff41;">✅ Connected to HPTA Real-time Backend Server</span>');
+                };
+                
+                websocket.onmessage = function(event) {
+                    const message = JSON.parse(event.data);
+                    
+                    if (message.type === 'terminal_output') {
+                        addToTerminal(message.content);
+                    } else if (message.type === 'vulnerability_found') {
+                        const vuln = message.vulnerability;
+                        addToTerminal(`<span style="color: #ff6b35;">🚨 VULNERABILITY: ${vuln.name} (${vuln.severity})</span>`);
+                        addToTerminal(`<span style="color: #ffa500;">   ${vuln.description}</span>`);
+                    }
+                };
+                
+                websocket.onclose = function() {
+                    status.textContent = 'Disconnected';
+                    status.className = 'status disconnected';
+                    addToTerminal('<span style="color: #ff4444;">❌ Disconnected from backend server</span>');
+                };
+                
+                websocket.onerror = function() {
+                    addToTerminal('<span style="color: #ff4444;">❌ Connection error - Is the backend server running?</span>');
+                    addToTerminal('<span style="color: #ffa500;">Run: python scripts/realtime_terminal_server.py</span>');
+                };
+                
+            } catch (error) {
+                addToTerminal('<span style="color: #ff4444;">❌ Failed to connect: ' + error + '</span>');
+            }
+        }
+
+        function sendCommand() {
+            const command = commandInput.value.trim();
+            if (!command) return;
+            
+            if (websocket && websocket.readyState === WebSocket.OPEN) {
+                websocket.send(JSON.stringify({
+                    type: 'command',
+                    command: command
+                }));
+                commandInput.value = '';
+            } else {
+                addToTerminal('<span style="color: #ff4444;">❌ Not connected to backend server</span>');
+            }
+        }
+
+        function clearTerminal() {
+            terminal.innerHTML = '';
+        }
+
+        // Enter key support
+        commandInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                sendCommand();
+            }
+        });
+
+        // Connect on page load
+        connectToBackend();
+    </script>
+</body>
+</html>

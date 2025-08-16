@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Unified Reverse Engineering Analyzer Runner
-Uses existing reverseengineering folder capabilities with single command
+Ultra Malware Scanner Runner V3.0 (Quantum Nexus Edition)
+Uses the new ultra-malware-scanner V3.0 with quantum-enhanced threat detection capabilities
 Usage: python run_reverse_engineering.py <target_file>
 """
 
@@ -12,9 +12,10 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 
-def run_reverse_engineering_analyzer(target_file):
-    """Run reverse engineering analyzer with unified command"""
-    print(f"🚀 Starting Reverse Engineering Analysis for: {target_file}")
+def run_ultra_malware_scanner(target_file):
+    """Run ultra malware scanner with enhanced capabilities"""
+    print(f"� Starting Quantum Ultra Malware Analysis V3.0 for: {target_file}")
+    print("🚀 Nexus Edition - Quantum AI & Neural Networks Enabled")
     print("=" * 80)
     
     # Check if target file exists
@@ -22,34 +23,32 @@ def run_reverse_engineering_analyzer(target_file):
         print(f"❌ Target file not found: {target_file}")
         return None
     
-    # Change to reverseengineering directory
-    re_dir = Path("reverseengineering")
-    if not re_dir.exists():
-        print("❌ reverseengineering folder not found!")
-        return None
+    # Change to ultra-malware-scanner directory (go up one level first)
+    scanner_dir = Path("../ultra-malware-scanner")
+    if not scanner_dir.exists():
+        print("❌ ultra-malware-scanner folder not found!")
     
     original_dir = os.getcwd()
     
     try:
-        os.chdir(re_dir)
+        os.chdir(scanner_dir)
         
-        # Copy target file to analysis directory
+        # Copy target file to analysis directory if needed
         target_path = Path(target_file)
         if target_path.is_absolute():
-            # If absolute path, copy to current directory
-            import shutil
-            local_target = target_path.name
-            shutil.copy2(target_path, local_target)
-            analysis_target = local_target
+            # If absolute path, use directly
+            analysis_target = str(target_path)
         else:
-            # If relative path, adjust for new working directory
-            analysis_target = os.path.join("..", target_file)
+            # If relative path, convert to absolute path from original directory
+            abs_target_path = os.path.abspath(os.path.join(original_dir, target_file))
+            analysis_target = abs_target_path
         
-        print("🔍 Running comprehensive reverse engineering analysis...")
+        print("🧬 Running Quantum Ultra Malware Scanner V3.0 with neural networks...")
+        print("🌐 APT attribution, AI analysis, and quantum threat detection enabled...")
         
-        # Run the Windows reverse analyzer
+        # Run the ultra malware scanner V3.0
         result = subprocess.run([
-            sys.executable, "windows_reverse_analyzer.py", analysis_target
+            sys.executable, "ultra_malware_scanner_v3.py", analysis_target
         ], capture_output=True, text=True, timeout=300)
         
         print("📊 Analysis Output:")
@@ -60,31 +59,30 @@ def run_reverse_engineering_analyzer(target_file):
             print(result.stderr)
         
         # Look for generated reports
-        reports_dir = Path("reports")
-        report_files = []
-        
-        if reports_dir.exists():
-            # Find JSON reports
-            json_reports = list(reports_dir.glob("*.json"))
-            html_reports = list(reports_dir.glob("*.html"))
-            
-            report_files.extend(json_reports)
-            report_files.extend(html_reports)
+        report_files = list(Path(".").glob("*report*.json"))
         
         # Create unified report
         report_data = {
             "target_file": target_file,
             "timestamp": datetime.now().isoformat(),
-            "analyzer": "ReverseEngineeringAnalyzer",
+            "analyzer": "UltraMalwareScanner",
+            "scanner_version": "2.0.0 Elite Edition",
             "status": "completed" if result.returncode == 0 else "error",
             "output": result.stdout,
             "errors": result.stderr if result.stderr else None,
-            "generated_reports": [str(f) for f in report_files]
+            "generated_reports": [str(f) for f in report_files],
+            "capabilities": [
+                "Universal file type scanning",
+                "APT group attribution", 
+                "Hacker geolocation tracking",
+                "Advanced behavioral analysis",
+                "Real-time threat intelligence"
+            ]
         }
         
         # Try to read the latest JSON report if available
-        if json_reports:
-            latest_report = max(json_reports, key=lambda x: x.stat().st_mtime)
+        if report_files:
+            latest_report = max(report_files, key=lambda x: x.stat().st_mtime)
             try:
                 with open(latest_report, 'r', encoding='utf-8') as f:
                     detailed_analysis = json.load(f)
@@ -99,7 +97,7 @@ def run_reverse_engineering_analyzer(target_file):
         print("⚠️ Analysis timeout - process took too long")
         return None
     except Exception as e:
-        print(f"❌ Error running analyzer: {e}")
+        print(f"❌ Error running ultra scanner: {e}")
         return None
     finally:
         os.chdir(original_dir)
@@ -110,49 +108,71 @@ def save_json_report(report_data):
         return None
     
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = f"reverse_engineering_unified_report_{timestamp}.json"
+    filename = f"ultra_malware_scan_report_{timestamp}.json"
     
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(report_data, f, indent=2, ensure_ascii=False)
     
-    print(f"📄 Unified JSON Report saved: {filename}")
+    print(f"📄 Ultra Scan Report saved: {filename}")
     return filename
 
 def main():
     if len(sys.argv) != 2:
+        print("🦠 Ultra Malware Scanner Runner")
         print("Usage: python run_reverse_engineering.py <target_file>")
         print("Example: python run_reverse_engineering.py suspicious_file.exe")
-        print("Example: python run_reverse_engineering.py /path/to/binary")
+        print("Example: python run_reverse_engineering.py /path/to/malware_sample")
+        print("")
+        print("🚀 Features:")
+        print("  • Universal file type scanning")
+        print("  • APT group attribution")
+        print("  • Hacker geolocation tracking") 
+        print("  • Advanced behavioral analysis")
+        print("  • Real-time threat intelligence")
         sys.exit(1)
     
     target_file = sys.argv[1]
     
     try:
-        # Run the analyzer
-        results = run_reverse_engineering_analyzer(target_file)
+        # Run the ultra scanner
+        results = run_ultra_malware_scanner(target_file)
         
         if results:
             # Save unified report
             report_file = save_json_report(results)
             
             print("\n" + "=" * 80)
-            print("✅ Reverse Engineering Analysis completed successfully!")
-            print(f"📊 Unified report saved to: {report_file}")
+            print("🎉 Ultra Malware Analysis completed successfully!")
+            print(f"📊 Detailed report saved to: {report_file}")
             
             # Show summary if detailed analysis available
             if "detailed_analysis" in results:
                 analysis = results["detailed_analysis"]
-                print("\n📋 Analysis Summary:")
-                if "risk_level" in analysis:
-                    print(f"🚨 Risk Level: {analysis['risk_level']}")
-                if "findings" in analysis:
-                    print(f"🔍 Findings: {len(analysis['findings'])}")
-                if "file_type" in analysis:
-                    print(f"📄 File Type: {analysis['file_type']}")
+                print("\n📋 Ultra Analysis Summary:")
+                
+                # Threat assessment
+                threat_score = analysis.get("threat_score", {})
+                if threat_score:
+                    print(f"🚨 Threat Level: {threat_score.get('threat_level', 'UNKNOWN')}")
+                    print(f"📊 Threat Score: {threat_score.get('total_score', 0)}/100")
+                
+                # Detected threats
+                malware_families = analysis.get("signature_analysis", {}).get("malware_families", [])
+                if malware_families:
+                    print(f"🦠 Detected Threats: {len(malware_families)}")
+                    for family in malware_families[:3]:  # Top 3
+                        print(f"   • {family['family']} ({family['category']}) - {family['confidence']*100:.0f}%")
+                
+                # APT attribution
+                if "threat_intelligence" in analysis:
+                    apt_attributions = analysis["threat_intelligence"].get("apt_attribution", [])
+                    if apt_attributions:
+                        top_apt = apt_attributions[0]
+                        print(f"🎯 Top APT Attribution: {top_apt['group']} ({top_apt['country']}) - {top_apt['confidence']*100:.1f}%")
             
             print("=" * 80)
         else:
-            print("❌ Analyzer failed to complete")
+            print("❌ Ultra Scanner failed to complete")
             sys.exit(1)
             
     except KeyboardInterrupt:
@@ -161,6 +181,9 @@ def main():
     except Exception as e:
         print(f"❌ Error: {e}")
         sys.exit(1)
+
+if __name__ == "__main__":
+    main()
 
 if __name__ == "__main__":
     main()

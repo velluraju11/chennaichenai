@@ -1,0 +1,14 @@
+{
+  "results": {
+    "ultra": {
+      "scanner": "ultra",
+      "target": "C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\banking_trojan_test.py",
+      "timestamp": "2025-08-16T15:39:37.263970",
+      "success": true,
+      "output": "Initializing Ultra Malware Scanner V3.0 Nexus Edition...\nLoading quantum AI detection engines...\nStarting quantum analysis...\n================================================================================\\nULTRA MALWARE SCANNER V3.0 - QUANTUM ANALYSIS REPORT\\n================================================================================\\nScan Timestamp: 2025-08-16T15:39:37.252184\\nScanner Version: 3.0.0-nexus\\nAI Models Active: QuantumNet, DeepThreat, NeuralGuard, APTHunter\\n\\nFILE ANALYSIS:\\n  Path: C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\banking_trojan_test.py\\n  Size: 24003 bytes\\n  Entropy: -0.26\\n  MD5: 3abb2a732740bef17228e2cd742b0789\\n  SHA256: b873ccdd71d22f488f8640e30a43b4dc4eecc6765fba2561d5daa90d1bf0577c\\n\\nTHREAT ASSESSMENT:\\n  Threat Score: 65.0/100\\n  Threat Level: HIGH\\n  Confidence: 98%\\n\\nAPT ATTRIBUTION:\\n  Primary Suspect: FancyBear\\n  Attribution Confidence: 80.0%\\n  All Matches:\\n    APT1: 1 indicators\\n    Lazarus: 3 indicators\\n    FancyBear: 4 indicators\\n    Carbanak: 3 indicators\\n\\nBEHAVIORAL ANALYSIS:\\n  Threat Vectors: ransomware, banking_trojan, apt_tool, rootkit\\n  Dominant Behavior: banking_trojan\\n\\nSUPPLY CHAIN ANALYSIS:\\n  Risk Level: MEDIUM\\n  Indicators: pip, gem\\n\\nQUANTUM ANALYSIS:\\n  Quantum Signature: a470cf4cab46275e\\n  Neural Classification: ransomware\\n\\nSECURITY RECOMMENDATIONS:\\n  [CRITICAL] Immediate isolation and detailed forensic analysis required\\n  [WARNING] Do not execute this file in production environment\\n  [ACTION] Submit to threat intelligence platforms\\n\\n================================================================================\\nQuantum Analysis Completed Successfully\\n================================================================================\n\\nDetailed results saved to: ultra_scan_20250816_153937.json\nAnalysis Time: 0.01 seconds\nQuantum Analysis Completed Successfully!\n",
+      "errors": "",
+      "return_code": 0
+    }
+  },
+  "success": true
+}

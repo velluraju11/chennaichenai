@@ -1,0 +1,39 @@
+{
+  "target": "C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\banking_trojan_test.py",
+  "timestamp": "2025-08-16T15:24:40.322263",
+  "scanners_run": [
+    "ultra",
+    "ryha",
+    "reverse"
+  ],
+  "results": {
+    "ultra": {
+      "scanner": "ultra",
+      "target": "C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\banking_trojan_test.py",
+      "timestamp": "2025-08-16T15:24:40.518193",
+      "success": true,
+      "output": "Initializing Ultra Malware Scanner V3.0 Nexus Edition...\nLoading quantum AI detection engines...\nStarting quantum analysis...\n================================================================================\\nULTRA MALWARE SCANNER V3.0 - QUANTUM ANALYSIS REPORT\\n================================================================================\\nScan Timestamp: 2025-08-16T15:24:40.494500\\nScanner Version: 3.0.0-nexus\\nAI Models Active: QuantumNet, DeepThreat, NeuralGuard, APTHunter\\n\\nFILE ANALYSIS:\\n  Path: C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\banking_trojan_test.py\\n  Size: 24003 bytes\\n  Entropy: -0.26\\n  MD5: 3abb2a732740bef17228e2cd742b0789\\n  SHA256: b873ccdd71d22f488f8640e30a43b4dc4eecc6765fba2561d5daa90d1bf0577c\\n\\nTHREAT ASSESSMENT:\\n  Threat Score: 65.0/100\\n  Threat Level: HIGH\\n  Confidence: 98%\\n\\nAPT ATTRIBUTION:\\n  Primary Suspect: FancyBear\\n  Attribution Confidence: 80.0%\\n  All Matches:\\n    APT1: 1 indicators\\n    Lazarus: 3 indicators\\n    FancyBear: 4 indicators\\n    Carbanak: 3 indicators\\n\\nBEHAVIORAL ANALYSIS:\\n  Threat Vectors: ransomware, banking_trojan, apt_tool, rootkit\\n  Dominant Behavior: banking_trojan\\n\\nSUPPLY CHAIN ANALYSIS:\\n  Risk Level: MEDIUM\\n  Indicators: pip, gem\\n\\nQUANTUM ANALYSIS:\\n  Quantum Signature: 4c226f4bed483f67\\n  Neural Classification: ransomware\\n\\nSECURITY RECOMMENDATIONS:\\n  [CRITICAL] Immediate isolation and detailed forensic analysis required\\n  [WARNING] Do not execute this file in production environment\\n  [ACTION] Submit to threat intelligence platforms\\n\\n================================================================================\\nQuantum Analysis Completed Successfully\\n================================================================================\n\\nDetailed results saved to: ultra_scan_20250816_152440.json\nAnalysis Time: 0.00 seconds\nQuantum Analysis Completed Successfully!\n",
+      "errors": "",
+      "return_code": 0
+    },
+    "ryha": {
+      "scanner": "ryha",
+      "target": "C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\banking_trojan_test.py",
+      "timestamp": "2025-08-16T15:24:40.648327",
+      "success": false,
+      "output": "",
+      "errors": "Traceback (most recent call last):\n  File \"C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\scripts\\run_ryha_malware_analyzer.py\", line 212, in main\n    results = run_ryha_malware_analyzer(target_file)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\scripts\\run_ryha_malware_analyzer.py\", line 42, in run_ryha_malware_analyzer\n    print(f\"\\U0001f680 Starting Ryha Malware Analysis for: {target_file}\")\n  File \"C:\\Users\\vellu\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\U0001f680' in position 0: character maps to <undefined>\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\scripts\\run_ryha_malware_analyzer.py\", line 252, in <module>\n    main()\n  File \"C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\scripts\\run_ryha_malware_analyzer.py\", line 248, in main\n    print(f\"\\u274c Error: {e}\")\n  File \"C:\\Users\\vellu\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\u274c' in position 0: character maps to <undefined>\n",
+      "return_code": 1
+    },
+    "reverse": {
+      "scanner": "reverse",
+      "target": "C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\banking_trojan_test.py",
+      "timestamp": "2025-08-16T15:24:40.795232",
+      "success": false,
+      "output": "",
+      "errors": "Traceback (most recent call last):\n  File \"C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\scripts\\run_reverse_engineering.py\", line 138, in main\n    results = run_ultra_malware_scanner(target_file)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\scripts\\run_reverse_engineering.py\", line 17, in run_ultra_malware_scanner\n    print(f\"\\ufffd Starting Quantum Ultra Malware Analysis V3.0 for: {target_file}\")\n  File \"C:\\Users\\vellu\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\ufffd' in position 0: character maps to <undefined>\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\scripts\\run_reverse_engineering.py\", line 186, in <module>\n    main()\n  File \"C:\\Users\\vellu\\OneDrive\\Desktop\\chennai-123-hpta\\scripts\\run_reverse_engineering.py\", line 182, in main\n    print(f\"\\u274c Error: {e}\")\n  File \"C:\\Users\\vellu\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\u274c' in position 0: character maps to <undefined>\n",
+      "return_code": 1
+    }
+  },
+  "success": false
+}
