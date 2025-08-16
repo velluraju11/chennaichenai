@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HPTA Live Findings Test</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+        .test-button {
+            background: #00d4ff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            min-width: 200px;
+        }
+        .test-button:hover {
+            background: #00b8e6;
+        }
+        .test-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        .result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        .success { background: rgba(0, 255, 136, 0.2); }
+        .error { background: rgba(255, 71, 87, 0.2); }
+        .info { background: rgba(0, 212, 255, 0.2); }
+        .warning { background: rgba(255, 193, 7, 0.2); }
+        .finding {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #00d4ff;
+        }
+        .finding.critical { border-left-color: #dc3545; }
+        .finding.high { border-left-color: #fd7e14; }
+        .finding.medium { border-left-color: #ffc107; }
+        .finding.low { border-left-color: #28a745; }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #00ff88);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .api-key-input {
+            width: 300px;
+            padding: 10px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            placeholder-color: rgba(255,255,255,0.7);
+        }
+        .api-key-input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ HPTA Security Suite - Live Findings Test</h1>
+        <p>Test the complete backend functionality with live findings and real security analysis</p>
+        
+        <div class="test-section">
+            <h3>🔑 API Configuration</h3>
+            <input type="password" id="apiKey" class="api-key-input" placeholder="Enter your Gemini API Key (optional)">
+            <button class="test-button" onclick="validateApiKey()">Validate API Key</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>🧪 Backend Connectivity Tests</h3>
+            <button class="test-button" onclick="testBackend()">Test Backend API</button>
+            <button class="test-button" onclick="testHealth()">Test Health Check</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔍 Security Analysis Tests (Live Findings)</h3>
+            <button class="test-button" onclick="startWebScan()">Start Web Security Scan</button>
+            <button class="test-button" onclick="startMalwareAnalysis()">Start Malware Analysis</button>
+            <button class="test-button" onclick="startReverseEngineering()">Start Reverse Engineering</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 Analysis Progress</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div id="currentStep">Ready to start analysis...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📡 Live Findings</h3>
+            <div id="liveFindings">No findings yet - start an analysis to see live results!</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📝 System Log</h3>
+            <div id="systemLog" style="max-height: 300px; overflow-y: auto; font-family: monospace; font-size: 12px;"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentAnalysisId = null;
+        let progressInterval = null;
+
+        function log(message, type = 'info') {
+            const systemLog = document.getElementById('systemLog');
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}:</strong> ${message}`;
+            systemLog.appendChild(div);
+            systemLog.scrollTop = systemLog.scrollHeight;
+        }
+
+        async function testBackend() {
+            log('Testing backend API connectivity...', 'info');
+            try {
+                const response = await fetch('/api/test');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    log(`✅ Backend API Working: ${data.message}`, 'success');
+                    log(`Features: ${JSON.stringify(data.features)}`, 'info');
+                } else {
+                    log(`❌ Backend API Error: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Backend Connection Failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testHealth() {
+            log('Testing health check endpoint...', 'info');
+            try {
+                const response = await fetch('/health');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    log(`✅ Health Check Passed: ${data.status}`, 'success');
+                    log(`Backend: ${data.backend}, Platform: ${data.platform}`, 'info');
+                } else {
+                    log(`❌ Health Check Failed: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Health Check Connection Failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function validateApiKey() {
+            const apiKey = document.getElementById('apiKey').value;
+            if (!apiKey) {
+                log('⚠️ Please enter your Gemini API key', 'warning');
+                return;
+            }
+            
+            log('Validating API key...', 'info');
+            try {
+                const response = await fetch('/api/validate-key', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ api_key: apiKey })
+                });
+                const data = await response.json();
+                
+                if (data.valid) {
+                    log(`✅ API Key Valid: ${data.message}`, 'success');
+                } else {
+                    log(`❌ API Key Invalid: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ API Key Validation Failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function startAnalysis(command, toolType) {
+            const apiKey = document.getElementById('apiKey').value || 'demo_key';
+            
+            log(`🚀 Starting ${toolType} analysis...`, 'info');
+            
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        command: command,
+                        api_key: apiKey
+                    })
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    currentAnalysisId = data.analysis_id;
+                    log(`✅ Analysis Started: ${data.message}`, 'success');
+                    log(`Analysis ID: ${data.analysis_id}, Tool: ${data.tool}`, 'info');
+                    
+                    // Start monitoring progress
+                    startProgressMonitoring();
+                } else {
+                    log(`❌ Analysis Failed: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                log(`❌ Analysis Request Failed: ${error.message}`, 'error');
+            }
+        }
+
+        function startWebScan() {
+            startAnalysis('scan testhtml5.vulnweb.com for OWASP vulnerabilities', 'Web Security');
+        }
+
+        function startMalwareAnalysis() {
+            startAnalysis('analyze suspicious_malware.exe for threats and malicious behavior', 'Malware Analysis');
+        }
+
+        function startReverseEngineering() {
+            startAnalysis('reverse engineer binary_sample.exe to find vulnerabilities', 'Reverse Engineering');
+        }
+
+        function startProgressMonitoring() {
+            if (progressInterval) clearInterval(progressInterval);
+            
+            progressInterval = setInterval(async () => {
+                if (!currentAnalysisId) return;
+                
+                try {
+                    const response = await fetch(`/progress/${currentAnalysisId}`);
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        // Update progress bar
+                        const progressBar = document.getElementById('progressBar');
+                        progressBar.style.width = `${data.progress}%`;
+                        
+                        // Update current step
+                        const currentStep = document.getElementById('currentStep');
+                        currentStep.textContent = `${data.status.toUpperCase()}: ${data.current_step} (${data.progress}%)`;
+                        
+                        // Update live findings
+                        updateLiveFindings(data.findings, data.live_findings);
+                        
+                        // Log progress
+                        log(`📊 Progress: ${data.progress}% - ${data.current_step}`, 'info');
+                        
+                        // Check if completed
+                        if (data.status === 'completed') {
+                            clearInterval(progressInterval);
+                            log(`🎉 Analysis Completed! Found ${data.findings.length} findings`, 'success');
+                            log(`Stats: Critical: ${data.stats.critical}, High: ${data.stats.high}, Medium: ${data.stats.medium}, Low: ${data.stats.low}`, 'info');
+                        } else if (data.status === 'error') {
+                            clearInterval(progressInterval);
+                            log('❌ Analysis Failed', 'error');
+                        }
+                    }
+                } catch (error) {
+                    log(`⚠️ Progress Update Failed: ${error.message}`, 'warning');
+                }
+            }, 2000); // Check every 2 seconds
+        }
+
+        function updateLiveFindings(findings, liveFindings) {
+            const container = document.getElementById('liveFindings');
+            
+            if (!findings || findings.length === 0) {
+                container.innerHTML = 'No findings yet - analysis in progress...';
+                return;
+            }
+            
+            let html = `<h4>🔍 Security Findings (${findings.length} total)</h4>`;
+            
+            findings.forEach((finding, index) => {
+                const severityClass = finding.severity || 'info';
+                html += `
+                    <div class="finding ${severityClass}">
+                        <strong>#${index + 1}: ${finding.title}</strong>
+                        <div style="margin-top: 5px; font-size: 14px;">
+                            <strong>Severity:</strong> ${(finding.severity || 'Unknown').toUpperCase()} |
+                            <strong>Category:</strong> ${finding.category || 'General'} |
+                            <strong>Location:</strong> ${finding.location || 'N/A'}
+                        </div>
+                        <div style="margin-top: 8px; color: rgba(255,255,255,0.9);">
+                            ${finding.description || 'No description available'}
+                        </div>
+                        ${finding.recommendation ? `
+                            <div style="margin-top: 8px; color: rgba(0,255,136,0.9); font-style: italic;">
+                                💡 ${finding.recommendation}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // Auto-test on page load
+        window.onload = function() {
+            log('🚀 HPTA Live Findings Test Page Loaded', 'success');
+            log('ℹ️ Use the buttons above to test different functionality', 'info');
+            
+            // Auto-test backend connectivity
+            setTimeout(() => {
+                testBackend();
+                setTimeout(() => testHealth(), 1000);
+            }, 500);
+        };
+    </script>
+</body>
+</html>
