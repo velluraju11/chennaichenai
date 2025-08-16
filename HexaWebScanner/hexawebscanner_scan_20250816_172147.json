@@ -1,0 +1,239 @@
+{
+  "scan_info": {
+    "target": "http://testphp.vulnweb.com",
+    "scan_start": "2025-08-16T17:21:48.444940",
+    "scanner": "HexaWebScanner v3.0",
+    "mode": "Real-time OWASP Top 150+"
+  },
+  "statistics": {
+    "total_vulnerabilities": 28,
+    "scan_progress": "10/150",
+    "scan_speed": "0.00 vulns/sec"
+  },
+  "vulnerabilities": [
+    {
+      "type": "Insecure Transport",
+      "description": "Site not using HTTPS",
+      "severity": "High",
+      "owasp_category": "A02:2021 - Cryptographic Failures",
+      "timestamp": "2025-08-16T17:21:47.090112",
+      "detection_time_ms": 1755345107090.1125
+    },
+    {
+      "type": "DIRECTORY_LISTING",
+      "description": "Directory listing enabled: /images/",
+      "severity": "Medium",
+      "owasp_category": "A99:2021 - Other",
+      "timestamp": "2025-08-16T17:21:47.619830",
+      "detection_time_ms": 1755345107619.8306
+    },
+    {
+      "type": "RATE_LIMITING",
+      "description": "Rate limiting bypass possible",
+      "severity": "Medium",
+      "owasp_category": "A99:2021 - Other",
+      "timestamp": "2025-08-16T17:21:47.629557",
+      "detection_time_ms": 1755345107629.5576
+    },
+    {
+      "type": "PRIVILEGE_ESCALATION",
+      "description": "Admin panel accessible: /admin/",
+      "severity": "High",
+      "owasp_category": "A01:2021 - Broken Access Control",
+      "timestamp": "2025-08-16T17:21:47.670812",
+      "detection_time_ms": 1755345107670.8123
+    },
+    {
+      "type": "VERSION_DISCLOSURE",
+      "description": "Version disclosure: Server",
+      "severity": "Info",
+      "owasp_category": "A06:2021 - Vulnerable and Outdated Components",
+      "timestamp": "2025-08-16T17:21:47.688265",
+      "detection_time_ms": 1755345107688.2654
+    },
+    {
+      "type": "VERSION_DISCLOSURE",
+      "description": "Version disclosure: X-Powered-By",
+      "severity": "Info",
+      "owasp_category": "A06:2021 - Vulnerable and Outdated Components",
+      "timestamp": "2025-08-16T17:21:47.692198",
+      "detection_time_ms": 1755345107692.198
+    },
+    {
+      "type": "CSRF Vulnerability",
+      "description": "Form without CSRF protection",
+      "severity": "High",
+      "owasp_category": "A01:2021 - Broken Access Control",
+      "timestamp": "2025-08-16T17:21:47.694003",
+      "detection_time_ms": 1755345107694.004
+    },
+    {
+      "type": "LOGGING_BYPASS",
+      "description": "Potential logging bypass",
+      "severity": "Medium",
+      "owasp_category": "A09:2021 - Security Logging and Monitoring Failures",
+      "timestamp": "2025-08-16T17:21:47.694609",
+      "detection_time_ms": 1755345107694.6096
+    },
+    {
+      "type": "SSRF",
+      "description": "SSRF vulnerability: http://127.0.0.1/",
+      "severity": "High",
+      "owasp_category": "A10:2021 - Server-Side Request Forgery",
+      "timestamp": "2025-08-16T17:21:47.695867",
+      "detection_time_ms": 1755345107695.8672
+    },
+    {
+      "type": "BUSINESS_LOGIC",
+      "description": "Business logic flaw: amount=-1",
+      "severity": "High",
+      "owasp_category": "A04:2021 - Insecure Design",
+      "timestamp": "2025-08-16T17:21:47.699447",
+      "detection_time_ms": 1755345107699.4478
+    },
+    {
+      "type": "Missing X-Frame-Options",
+      "description": "Clickjacking",
+      "severity": "Critical",
+      "owasp_category": "A06:2021 - Vulnerable and Outdated Components",
+      "timestamp": "2025-08-16T17:21:47.700390",
+      "detection_time_ms": 1755345107700.3909
+    },
+    {
+      "type": "Missing X-XSS-Protection",
+      "description": "XSS Filter Disabled",
+      "severity": "High",
+      "owasp_category": "A06:2021 - Vulnerable and Outdated Components",
+      "timestamp": "2025-08-16T17:21:47.702161",
+      "detection_time_ms": 1755345107702.1611
+    },
+    {
+      "type": "Missing X-Content-Type-Options",
+      "description": "MIME Sniffing",
+      "severity": "Medium",
+      "owasp_category": "A06:2021 - Vulnerable and Outdated Components",
+      "timestamp": "2025-08-16T17:21:47.703445",
+      "detection_time_ms": 1755345107703.4456
+    },
+    {
+      "type": "Missing Strict-Transport-Security",
+      "description": "HTTPS Not Enforced",
+      "severity": "High",
+      "owasp_category": "A06:2021 - Vulnerable and Outdated Components",
+      "timestamp": "2025-08-16T17:21:47.705704",
+      "detection_time_ms": 1755345107705.7046
+    },
+    {
+      "type": "Missing Content-Security-Policy",
+      "description": "XSS/Injection Protection Missing",
+      "severity": "Critical",
+      "owasp_category": "A06:2021 - Vulnerable and Outdated Components",
+      "timestamp": "2025-08-16T17:21:47.707603",
+      "detection_time_ms": 1755345107707.6033
+    },
+    {
+      "type": "Missing X-Permitted-Cross-Domain-Policies",
+      "description": "Flash XSS",
+      "severity": "Medium",
+      "owasp_category": "A06:2021 - Vulnerable and Outdated Components",
+      "timestamp": "2025-08-16T17:21:47.708844",
+      "detection_time_ms": 1755345107708.844
+    },
+    {
+      "type": "Missing Referrer-Policy",
+      "description": "Information Leak",
+      "severity": "Low",
+      "owasp_category": "A06:2021 - Vulnerable and Outdated Components",
+      "timestamp": "2025-08-16T17:21:47.710128",
+      "detection_time_ms": 1755345107710.1282
+    },
+    {
+      "type": "Missing Permissions-Policy",
+      "description": "Feature Policy Missing",
+      "severity": "Low",
+      "owasp_category": "A06:2021 - Vulnerable and Outdated Components",
+      "timestamp": "2025-08-16T17:21:47.712758",
+      "detection_time_ms": 1755345107712.7588
+    },
+    {
+      "type": "SSL_VALIDATION",
+      "description": "SSL certificate validation bypass possible",
+      "severity": "Medium",
+      "owasp_category": "A02:2021 - Cryptographic Failures",
+      "timestamp": "2025-08-16T17:21:47.713962",
+      "detection_time_ms": 1755345107713.9626
+    },
+    {
+      "type": "MONITORING_EVASION",
+      "description": "Monitoring evasion: debug=false",
+      "severity": "Medium",
+      "owasp_category": "A09:2021 - Security Logging and Monitoring Failures",
+      "timestamp": "2025-08-16T17:21:47.875133",
+      "detection_time_ms": 1755345107875.1333
+    },
+    {
+      "type": "HPP",
+      "description": "HTTP Parameter Pollution: id=1&id=2",
+      "severity": "Medium",
+      "owasp_category": "A99:2021 - Other",
+      "timestamp": "2025-08-16T17:21:47.908517",
+      "detection_time_ms": 1755345107908.517
+    },
+    {
+      "type": "BUSINESS_LOGIC",
+      "description": "Business logic flaw: quantity=0",
+      "severity": "High",
+      "owasp_category": "A04:2021 - Insecure Design",
+      "timestamp": "2025-08-16T17:21:47.932601",
+      "detection_time_ms": 1755345107932.601
+    },
+    {
+      "type": "MONITORING_EVASION",
+      "description": "Monitoring evasion: monitor=off",
+      "severity": "Medium",
+      "owasp_category": "A09:2021 - Security Logging and Monitoring Failures",
+      "timestamp": "2025-08-16T17:21:48.125289",
+      "detection_time_ms": 1755345108125.2893
+    },
+    {
+      "type": "HPP",
+      "description": "HTTP Parameter Pollution: user=admin&user=guest",
+      "severity": "Medium",
+      "owasp_category": "A99:2021 - Other",
+      "timestamp": "2025-08-16T17:21:48.158779",
+      "detection_time_ms": 1755345108158.7795
+    },
+    {
+      "type": "BUSINESS_LOGIC",
+      "description": "Business logic flaw: price=-100",
+      "severity": "High",
+      "owasp_category": "A04:2021 - Insecure Design",
+      "timestamp": "2025-08-16T17:21:48.190151",
+      "detection_time_ms": 1755345108190.1516
+    },
+    {
+      "type": "NO_BRUTE_FORCE_PROTECTION",
+      "description": "No brute force protection",
+      "severity": "High",
+      "owasp_category": "A07:2021 - Identification and Authentication Failures",
+      "timestamp": "2025-08-16T17:21:48.214824",
+      "detection_time_ms": 1755345108214.8247
+    },
+    {
+      "type": "MONITORING_EVASION",
+      "description": "Monitoring evasion: log=disable",
+      "severity": "Medium",
+      "owasp_category": "A09:2021 - Security Logging and Monitoring Failures",
+      "timestamp": "2025-08-16T17:21:48.374201",
+      "detection_time_ms": 1755345108374.2012
+    },
+    {
+      "type": "BUSINESS_LOGIC",
+      "description": "Business logic flaw: role=admin",
+      "severity": "High",
+      "owasp_category": "A04:2021 - Insecure Design",
+      "timestamp": "2025-08-16T17:21:48.444357",
+      "detection_time_ms": 1755345108444.3572
+    }
+  ]
+}
