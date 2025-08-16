@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: hpta-security-suite
+    env: python
+    plan: free
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+    startCommand: python start_hpta_production.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: PORT
+        generateValue: true
+      - key: SECRET_KEY
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false
+    healthCheckPath: /health
+    disk:
+      name: hpta-disk
+      mountPath: /opt/render/project/src/uploads
+      sizeGB: 1
+    scaling:
+      minInstances: 1
+      maxInstances: 1
+    domains:
+      - hpta-security-suite.onrender.com
