@@ -43,8 +43,7 @@ def main():
         host=host,
         port=port,
         debug=True,
-        use_reloader=True,
-        allow_unsafe_werkzeug=True
+        use_reloader=True
     )
 
 if __name__ == '__main__':

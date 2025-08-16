@@ -594,14 +594,13 @@ def main():
         print("🎯 Backend API fully functional")
         print("🌟 HPTA Security Suite is now LIVE!")
         
-        # Start Flask app
+        # Start Flask app - Compatible with all Werkzeug versions
         app.run(
             host=host,
             port=port,
             debug=False,
             use_reloader=False,
-            threaded=True,
-            allow_unsafe_werkzeug=True
+            threaded=True
         )
         
     except Exception as e:

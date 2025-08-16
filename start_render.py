@@ -82,8 +82,7 @@ def main():
             port=port,
             debug=False,
             use_reloader=False,
-            log_output=True,
-            allow_unsafe_werkzeug=True  # Allow Werkzeug in production for Render
+            log_output=True
         )
         
     except Exception as e:

@@ -159,8 +159,7 @@ def main():
             port=port,
             debug=False,
             use_reloader=False,
-            threaded=True,
-            allow_unsafe_werkzeug=True  # Allow for Render
+            threaded=True
         )
         
     except Exception as e:

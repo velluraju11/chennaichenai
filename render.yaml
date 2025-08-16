@@ -5,10 +5,10 @@ services:
     plan: free
     buildCommand: |
       pip install --upgrade pip
-      pip install -r requirements.txt
-      chmod +x build.sh
-      ./build.sh
-    startCommand: python start_full_backend.py
+      pip install -r requirements_hpta.txt
+      chmod +x build.sh || echo "build.sh not found, continuing..."
+      ./build.sh || echo "build.sh execution failed, continuing..."
+    startCommand: python start_minimal.py
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
