@@ -75,14 +75,15 @@ def main():
         print(f"🎯 Starting server on {host}:{port}...")
         print("🌟 HPTA Security Suite is now LIVE on Render!")
         
-        # Start the application with SocketIO
+        # Start the application with SocketIO - Production Ready
         app_instance.socketio.run(
             app_instance.app,
             host=host,
             port=port,
             debug=False,
             use_reloader=False,
-            log_output=True
+            log_output=True,
+            allow_unsafe_werkzeug=True  # Allow Werkzeug in production for Render
         )
         
     except Exception as e:

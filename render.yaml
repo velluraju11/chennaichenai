@@ -6,7 +6,7 @@ services:
     buildCommand: |
       pip install --upgrade pip
       pip install -r requirements.txt
-    startCommand: python start_hpta_production.py
+    startCommand: gunicorn --config gunicorn.conf.py app:app
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
@@ -24,5 +24,3 @@ services:
     scaling:
       minInstances: 1
       maxInstances: 1
-    domains:
-      - hpta-security-suite.onrender.com
