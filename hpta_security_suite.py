@@ -190,10 +190,6 @@ class HPTASecuritySuite:
                     return send_file(path, as_attachment=True)
             
             return jsonify({'error': 'Report file not found'}), 404
-        
-        @self.app.route('/api/health')
-        def health_check():
-            return jsonify({'status': 'healthy', 'timestamp': datetime.now().isoformat()})
 
     def validate_gemini_api_key(self):
         """Validate Gemini API key"""
