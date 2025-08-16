@@ -1,0 +1,9 @@
+[build]
+builder = "nixpacks"
+
+[deploy]
+startCommand = "python start_hpta.py"
+restartPolicyType = "ON_FAILURE"
+
+[env]
+FLASK_ENV = "production"

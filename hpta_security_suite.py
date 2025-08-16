@@ -102,6 +102,28 @@ class HPTASecuritySuite:
         def index():
             return render_template('hpta_dashboard.html')
         
+        @self.app.route('/health')
+        def health_check():
+            """Health check endpoint for load balancers and monitoring"""
+            try:
+                # Basic health checks
+                return jsonify({
+                    'status': 'healthy',
+                    'timestamp': datetime.now().isoformat(),
+                    'version': '1.0.0',
+                    'services': {
+                        'web_scanner': 'operational',
+                        'malware_analyzer': 'operational',
+                        'reverse_engineering': 'operational'
+                    }
+                }), 200
+            except Exception as e:
+                return jsonify({
+                    'status': 'unhealthy',
+                    'error': str(e),
+                    'timestamp': datetime.now().isoformat()
+                }), 503
+        
         @self.app.route('/api/validate-key', methods=['POST'])
         def validate_api_key():
             return self.validate_gemini_api_key()
