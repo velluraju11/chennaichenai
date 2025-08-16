@@ -1,0 +1,48 @@
+# Git files
+.git
+.gitignore
+
+# Documentation files (reduce image size)
+*.md
+docs/
+
+# Test files
+test_*
+tests/
+
+# Scan results
+*_scan_*.json
+hexawebscanner_scan_*.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+env/
+.env
+
+# Development files
+.vscode/
+.idea/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Deployment files not needed in container
+deploy.sh
+deploy.bat
+RAILWAY_DEPLOYMENT_GUIDE.md
+HOSTING_DEPLOYMENT_GUIDE.md
+PRODUCTION_DEPLOYMENT_CHECKLIST.md
+kubernetes-deployment.yml
+docker-compose*.yml
