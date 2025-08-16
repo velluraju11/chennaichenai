@@ -1,9 +1,15 @@
 [build]
 builder = "nixpacks"
 
+[build.nixpacksConfig]
+pythonVersion = "3.11"
+
 [deploy]
-startCommand = "python start_hpta.py"
+startCommand = "python main.py"
 restartPolicyType = "ON_FAILURE"
+healthcheckPath = "/health"
+healthcheckTimeout = 300
 
 [env]
 FLASK_ENV = "production"
+PYTHONPATH = "/app"

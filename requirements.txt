@@ -1,0 +1,10 @@
+flask==2.3.3
+flask-socketio==5.3.6
+google-generativeai==0.3.2
+werkzeug==2.3.7
+requests==2.31.0
+pathlib2==2.3.7
+typing-extensions==4.8.0
+python-dotenv==1.0.0
+eventlet==0.33.3
+gunicorn==21.2.0
