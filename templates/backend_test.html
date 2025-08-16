@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HPTA Backend Test</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .test-button {
+            background: #00d4ff;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            min-width: 200px;
+        }
+        .test-button:hover {
+            background: #00b8e6;
+        }
+        .result {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            min-height: 50px;
+        }
+        .success { background: rgba(0, 255, 136, 0.2); }
+        .error { background: rgba(255, 71, 87, 0.2); }
+        .info { background: rgba(0, 212, 255, 0.2); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ HPTA Backend Connectivity Test</h1>
+        <p>Test if the backend API is working properly on Render</p>
+        
+        <div>
+            <button class="test-button" onclick="testBackend()">Test Backend API</button>
+            <button class="test-button" onclick="testHealth()">Test Health Check</button>
+            <button class="test-button" onclick="testAnalyze()">Test Analyze Endpoint</button>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        function addResult(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}:</strong> ${message}`;
+            results.appendChild(div);
+            results.scrollTop = results.scrollHeight;
+        }
+
+        async function testBackend() {
+            addResult('Testing backend API connectivity...', 'info');
+            try {
+                const response = await fetch('/api/test');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    addResult(`✅ Backend API Working: ${data.message}`, 'success');
+                    addResult(`Server: ${data.server}, Time: ${data.timestamp}`, 'info');
+                } else {
+                    addResult(`❌ Backend API Error: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Backend Connection Failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testHealth() {
+            addResult('Testing health check endpoint...', 'info');
+            try {
+                const response = await fetch('/health');
+                const data = await response.json();
+                
+                if (response.ok) {
+                    addResult(`✅ Health Check Passed: ${data.status}`, 'success');
+                    addResult(`Platform: ${data.platform}, Version: ${data.version}`, 'info');
+                } else {
+                    addResult(`❌ Health Check Failed: ${response.status}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Health Check Connection Failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testAnalyze() {
+            addResult('Testing analyze endpoint...', 'info');
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        command: 'test scan google.com',
+                        api_key: 'test_key'
+                    })
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    addResult(`✅ Analyze Endpoint Working: ${data.message}`, 'success');
+                    addResult(`Analysis ID: ${data.analysis_id}, Backend Working: ${data.backend_working}`, 'info');
+                } else {
+                    addResult(`❌ Analyze Endpoint Error: ${data.error || response.status}`, 'error');
+                }
+            } catch (error) {
+                addResult(`❌ Analyze Endpoint Failed: ${error.message}`, 'error');
+            }
+        }
+
+        // Auto-test on page load
+        window.onload = function() {
+            addResult('🚀 HPTA Backend Test Page Loaded', 'info');
+            setTimeout(() => {
+                testBackend();
+                setTimeout(() => testHealth(), 1000);
+            }, 500);
+        };
+    </script>
+</body>
+</html>

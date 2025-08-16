@@ -6,7 +6,9 @@ services:
     buildCommand: |
       pip install --upgrade pip
       pip install -r requirements.txt
-    startCommand: gunicorn --config gunicorn.conf.py app:app
+      chmod +x build.sh
+      ./build.sh
+    startCommand: python start_simple.py
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
@@ -17,10 +19,3 @@ services:
       - key: GEMINI_API_KEY
         sync: false
     healthCheckPath: /health
-    disk:
-      name: hpta-disk
-      mountPath: /opt/render/project/src/uploads
-      sizeGB: 1
-    scaling:
-      minInstances: 1
-      maxInstances: 1
